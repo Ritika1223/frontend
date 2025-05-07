@@ -1,19 +1,15 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import EnquiryForm from './EnquiryForm';
-import { useTranslation } from "react-i18next";
 
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isLanguageOpen, setIsLanguageOpen] = useState(false);
-  const { t, i18n } = useTranslation();
 
   const [showEnquiryForm, setShowEnquiryForm] = useState(false);
 
-   const handleChangeLanguage = (lang) => {
-    i18n.changeLanguage(lang);
-  };
+  
   
 
   return (
