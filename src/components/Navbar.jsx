@@ -175,7 +175,7 @@ const Navbar = () => {
             <div className="hidden md:flex items-center space-x-4">
             <button
                 onClick={() => setShowEnquiryForm(true)}
-                className="border-2 border-[#3B4B96] text-[#3B4B96] px-6 py-2 rounded-xl hover:bg-[#3B4B96] hover:text-white transition-all duration-300 flex items-center group shadow-sm hover:shadow-md transform hover:-translate-y-0.5"
+                className="bg-gradient-to-r from-[#3B4B96] to-[#FF5722] text-white px-6 py-2 rounded-xl hover:bg-[#3B4B96] hover:text-white transition-all duration-300 flex items-center group shadow-sm hover:shadow-md transform hover:-translate-y-0.5"
               >
                 <span>Send Enquiry</span>
                 <svg className="w-5 h-5 ml-2 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
