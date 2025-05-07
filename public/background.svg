@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1920" height="1080" viewBox="0 0 1920 1080" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background gradient -->
+  <rect width="1920" height="1080" fill="url(#gradient)"/>
+  
+  <!-- Bus silhouette pattern -->
+  <pattern id="busPattern" x="0" y="0" width="400" height="300" patternUnits="userSpaceOnUse">
+    <path d="M50 150 L350 150 L350 230 L50 230 Z" fill="#EEEEEE" opacity="0.1"/>
+  </pattern>
+  <rect width="1920" height="1080" fill="url(#busPattern)"/>
+  
+  <!-- Gradient definition -->
+  <defs>
+    <linearGradient id="gradient" x1="0" y1="0" x2="1920" y2="1080" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#F5F5F5"/>
+    </linearGradient>
+  </defs>
+</svg> 
