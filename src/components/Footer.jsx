@@ -1,13 +1,12 @@
-// Footer.jsx
 import React from 'react';
 import { Link } from 'react-router-dom';
 import BusAnimation from '../bus/BusAnimation';
 
 const Footer = () => {
   return (
-    <footer className="relative bg-white/90 backdrop-blur-sm text-center shadow-top z-[50]">
+    <footer className="w-full bg-white/90 backdrop-blur-sm text-center shadow-top z-[50] sm:relative sm:bottom-auto sm:left-auto sm:w-auto fixed bottom-0 left-0 py-2">
       <BusAnimation />
-      <div className="flex flex-col sm:flex-row items-center justify-center gap-2 text-gray-600">
+      <div className="flex items-center justify-center gap-2 text-gray-600 flex-wrap">
         <div className="flex items-center gap-2">
           <span className="text-sm md:text-base">All Rights Reserved.</span>
           <span className="text-sm md:text-base hidden sm:inline">•</span>

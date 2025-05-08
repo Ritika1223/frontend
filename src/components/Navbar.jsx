@@ -25,8 +25,8 @@ const Navbar = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
             </div>
-            <span className="hidden md:inline">B-128 Transport Nagar, Sector-69, Noida, 201301</span>
-          </div>
+            <span>B-128 Transport Nagar, Sector-69, Noida, 201301</span>
+            </div>
 
           {/* Toll Free */}
           <div className="hidden md:flex items-center text-gray-600 hover:text-[#3B4B96] transition-colors group cursor-pointer">
@@ -85,7 +85,7 @@ const Navbar = () => {
             </div>
             
               {/* Language Selector */}
-              <div className="relative">
+              <div className="relative hidden md:block">
               <button 
                 onClick={() => setIsLanguageOpen(!isLanguageOpen)}
                 className="flex items-center text-gray-600 hover:text-[#3B4B96] transition-colors group"
@@ -114,13 +114,13 @@ const Navbar = () => {
 
 
       {/* Main Navbar */}
-      <nav className="bg-white shadow-lg">
+      <nav className="bg-white ">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="flex justify-between h-16">
+          <div className="flex justify-between h-14">
             {/* Logo */}
             <div className="flex-shrink-0 flex items-center">
               <Link to="/" className="transform hover:scale-105 transition-transform duration-200">
-                <img className="h-14 w-auto" src="/logo2-removebg-preview.png" alt="ANT" />
+                <img className="h-12 w-auto" src="/logo2-removebg-preview.png" alt="ANT" />
               </Link>
             </div>
 
@@ -172,24 +172,31 @@ const Navbar = () => {
 
 
             {/* Right Buttons */}
-            <div className="hidden md:flex items-center space-x-4">
-            <button
-                onClick={() => setShowEnquiryForm(true)}
-                className="bg-gradient-to-r from-[#3B4B96] to-[#FF5722] text-white px-6 py-2 rounded-xl hover:bg-[#3B4B96] hover:text-white transition-all duration-300 flex items-center group shadow-sm hover:shadow-md transform hover:-translate-y-0.5"
-              >
-                <span>Send Enquiry</span>
-                <svg className="w-5 h-5 ml-2 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                </svg>
-              </button>
-              <Link
-                to="/operator-registration"
-                className="bg-gradient-to-r from-[#3B4B96] to-[#FF5722] text-white px-6 py-2.5 rounded-xl hover:from-[#2C3A7D] hover:to-[#E64A19] transition-all duration-300 flex items-center group shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
-              >
-                <span>Operator Registration</span>
-                <svg className="w-5 h-5 ml-2 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                </svg>
+           {/* Send Enquiry Button - visible on all screens */}
+<div className="flex items-center space-x-4">
+  <button
+    onClick={() => setShowEnquiryForm(true)}
+    className="bg-gradient-to-r from-[#3B4B96] to-[#FF5722] text-white px-6 py-2 rounded-xl hover:bg-[#3B4B96] hover:text-white transition-all duration-300 flex items-center group shadow-sm hover:shadow-md transform hover:-translate-y-0.5"
+  >
+    <span>Send Enquiry</span>
+    <svg className="w-5 h-5 ml-2 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+    </svg>
+  </button>
+</div>
+
+{/* Operator Registration - hidden on mobile, shown on md+ */}
+<div className="hidden md:flex items-center ml-3">
+  <Link
+    to="/operator-registration"
+    className="bg-gradient-to-r from-[#3B4B96] to-[#FF5722] text-white px-6 py-2.5 rounded-xl hover:from-[#2C3A7D] hover:to-[#E64A19] transition-all duration-300 flex items-center group shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+  >
+    <span>Operator Registration</span>
+    <svg className="w-5 h-5 ml-2 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+    </svg>
+  
+
               </Link>
              
             </div>
@@ -288,15 +295,7 @@ const Navbar = () => {
               </div>
 
               <div className="pt-4 flex flex-col space-y-3">
-              <button
-                  onClick={() => setShowEnquiryForm(true)}
-                  className="border-2 border-[#3B4B96] text-[#3B4B96] px-6 py-2.5 rounded-xl hover:bg-[#3B4B96] hover:text-white transition-all duration-300 text-center flex items-center justify-center space-x-2"
-                >
-                  <span>Send Enquiry</span>
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                  </svg>
-                </button>
+             
                 <Link
                   to="/operator-registration"
                   className="bg-gradient-to-r from-[#3B4B96] to-[#FF5722] text-white px-6 py-3 rounded-xl hover:from-[#2C3A7D] hover:to-[#E64A19] transition-all duration-300 text-center flex items-center justify-center space-x-2 shadow-md"
