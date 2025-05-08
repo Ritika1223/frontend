@@ -425,15 +425,17 @@ const EnquiryForm = ({ isOpen, onClose }) => {
                   <div className="space-y-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                        Travel Date & Time
+                        Travel Date 
                       </label>
                       <DatePicker
-                        selected={formData.travelDate}
-                        onChange={(date) => setFormData(prev => ({ ...prev, travelDate: date }))}
-                        showTimeSelect
-                        dateFormat="MMMM d, yyyy h:mm aa"
+selected={formData.travelDate ? new Date(formData.travelDate) : null}
+onChange={(date) => {
+                          const formatted = date ? date.toISOString().split("T")[0] : "";
+                          setFormData(prev => ({ ...prev, travelDate: formatted }));
+                        }}                       
+                        dateFormat="MMMM d, yyyy "
                         className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg text-gray-900 focus:outline-none hover:border-[#FF5722]"
-                        placeholderText="Select date and time"
+                        placeholderText="Select date "
                         required
                       />
                     </div>
@@ -524,15 +526,17 @@ const EnquiryForm = ({ isOpen, onClose }) => {
 
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                        Drop-off Date & Time
+                        Drop-off Date 
                       </label>
                       <DatePicker
-                        selected={formData.dropDate}
-                        onChange={(date) => setFormData(prev => ({ ...prev, dropDate: date }))}
-                        showTimeSelect
-                        dateFormat="MMMM d, yyyy h:mm aa"
+selected={formData.dropDate ? new Date(formData.dropDate) : null}
+onChange={(date) => {
+  const formatted = date ? date.toISOString().split("T")[0] : "";
+  setFormData(prev => ({ ...prev, dropDate: formatted }));
+}}                        
+                        dateFormat="MMMM d, yyyy "
                         className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg text-gray-900 focus:outline-none hover:border-[#FF5722]"
-                        placeholderText="Select date and time"
+                        placeholderText="Select date "
                         required
                       />
                     </div>
