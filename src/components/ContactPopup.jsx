@@ -36,14 +36,14 @@ function ContactPopup({ onClose }) {
 
         {/* Right: Map */}
         <div className="flex-1">
-          <iframe 
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14015.736260840796!2d77.3841026!3d28.608317!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390cecd2212bfff3%3A0xfbb3b2a0b7d4c12a!2sANT%20TRAVELS%20PVT.%20LTD.!5e0!3m2!1sen!2sin!4v1682158303105!5m2!1sen!2sin"
-            className="w-full h-64 rounded-lg border"
-            allowFullScreen=""
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-            title="ANT Travels Map"
-          ></iframe>
+  <iframe 
+    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14015.514163685793!2d77.38872731589588!3d28.610389482419698!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390ce4363000001f%3A0x173b4bedbe5d95a0!2sA%20N%20T%20TRAVELS%20PVT.%20LTD.%2C%20B-128%2C%20Transport%20Nagar%2C%20Sector%2069%2C%20Noida%2C%20Uttar%20Pradesh%20201301!5e0!3m2!1sen!2sin!4v1715167200000!5m2!1sen!2sin"
+    className="w-full h-64 rounded-lg border"
+    allowFullScreen=""
+    loading="lazy"
+    referrerPolicy="no-referrer-when-downgrade"
+    title="ANT Travels Map"
+  ></iframe>
         </div>
       </div>
     </div>
