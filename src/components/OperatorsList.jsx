@@ -19,7 +19,7 @@ const OperatorsList = () => {
         }
         
         console.log('Making API call with token...');
-        const response = await fetch('http://localhost:5000/api/operators', {
+        const response = await fetch('http://localhost:8080/api/operators', {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'

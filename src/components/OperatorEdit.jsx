@@ -17,7 +17,7 @@ const OperatorEdit = () => {
   useEffect(() => {
     const fetchOperatorDetails = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/operators/${id}`);
+        const response = await fetch(`http://localhost:8080/api/operators/${id}`);
         if (!response.ok) {
           throw new Error('Failed to fetch operator details');
         }
@@ -80,7 +80,7 @@ const OperatorEdit = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`http://localhost:5000/api/operators/${id}`, {
+      const response = await fetch(`http://localhost:8080/api/operators/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

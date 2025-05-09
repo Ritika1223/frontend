@@ -16,7 +16,7 @@ const OperatorDetails = () => {
           throw new Error('No auth token found');
         }
 
-        const response = await fetch(`http://localhost:5000/api/operators/${id}`, {
+        const response = await fetch(`http://localhost:8080/api/operators/${id}`, {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'

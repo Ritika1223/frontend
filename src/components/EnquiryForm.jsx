@@ -305,19 +305,17 @@ const EnquiryForm = ({ isOpen, onClose }) => {
           </div>
 
           {/* Header Content */}
-          <div className="p-8 relative">
+          <div className="p-4 relative">
             <div className="flex justify-between items-start">
               <div className="space-y-3">
-                <div className="flex items-center gap-3 animate-fadeInSlide">
+                <div className="flex items-center gap-3 animate-fadeInSlide ">
                   {/* Bus Icon */}
 
-                  <h2 className="text-3xl font-bold">
+                  <h2 className="text-2xl font-bold">
                     <span className="bg-gradient-to-r from-[#FF5722] to-[#3B4B96] bg-clip-text text-transparent">
                       Bus Hire
                     </span>
                   </h2>
-                </div>
-                <div className="pl-1 animate-fadeInSlideDelay">
                   <p className="text-gray-500 flex items-center gap-2">
                     <span className="w-1.5 h-1.5 rounded-full bg-[#FF5722]"></span>
                     Submit Your Details
