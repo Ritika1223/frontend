@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import OperatorDropdown from './OperatorDropdown';
 import Navbar from './Navbar'
 import jsPDF from 'jspdf';
+import { uploadFileToFirebase } from "../firebase/firebaseUpload";
 
 const statesData = {
   Uttarakhand: ['Dehradun', 'Haridwar', 'Rishikesh', 'Nainital', 'Mussoorie', 'Almora', 'Haldwani'],
@@ -386,7 +387,9 @@ const OperatorForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     const validation = validateStep(step, formData);
+
     setErrors(validation);
     if (Object.keys(validation).length > 0) {
       alert('Please fix errors before submitting.');
