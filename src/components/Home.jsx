@@ -5,7 +5,7 @@ import EnquiryForm from './EnquiryForm';
 const Home = ({ showContact, showForm, handleCloseContact, setShowForm }) => {
   return (
     <>
-      <main className="relative h-[calc(100vh-88px)]">
+      <main className="relative h-[calc(90vh-88px)]">
         {/* Background Image with overlay for larger screens */}
         <div className="absolute inset-0 z-0 hidden sm:block">
           <img
