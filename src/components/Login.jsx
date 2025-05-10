@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import API_URLS from '../ApIURLs';
 const Login = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -25,7 +25,7 @@ const Login = () => {
     try {
       console.log('Attempting login with:', { username: formData.username });
       
-      const response = await fetch('http://localhost:8080/api/auth/login', {
+      const response = await fetch(API_URLS.LOGIN, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import API_URLS from '../ApIURLs';
 const OperatorsList = () => {
   const navigate = useNavigate();
   const [operators, setOperators] = useState([]);
@@ -19,7 +19,7 @@ const OperatorsList = () => {
         }
         
         console.log('Making API call with token...');
-        const response = await fetch('http://localhost:8080/api/operators', {
+        const response = await fetch(API_URLS.OPERATORS, {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'

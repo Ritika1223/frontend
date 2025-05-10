@@ -13,7 +13,7 @@ const OperatorDropdown = ({ options, value, onChange, placeholder, isOpen, onOpe
         !dropdownRef.current.contains(event.target) &&
         (!buttonRef.current || !buttonRef.current.contains(event.target))
       ) {
-        onClose();
+        onClose(); 
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
