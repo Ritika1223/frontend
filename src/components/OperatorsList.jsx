@@ -101,18 +101,22 @@ const OperatorsList = () => {
             <div className="flex items-center">
               <img src="/logo2-removebg-preview.png" alt="ANT" className="h-12 w-auto mr-6" />
               <div>
-                <h1 className="text-3xl font-bold text-white mb-1">Registered Operators</h1>
+                <h1 className="text-3xl font-bold text-white mb-1">Operators Dashboard</h1>
                 <p className="text-white/80">Manage and view all registered bus operators</p>
               </div>
             </div>
             <button
-              onClick={() => navigate('/operator-registration')}
+              onClick={() => navigate('/operators/requests')}
               className="inline-flex items-center px-6 py-3 border border-transparent rounded-xl shadow-sm text-base font-medium text-[#3B4B96] bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#3B4B96] focus:ring-white transition-all duration-300 transform hover:scale-105"
             >
-              <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-              </svg>
-              Add New Operator
+<svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+  <circle cx="9" cy="7" r="4" stroke="currentColor" strokeWidth={2} />
+  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M23 10v6m3-3h-6" />
+  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 3.13a4 4 0 010 7.75" />
+</svg>
+
+              Operator Requests
             </button>
           </div>
         </div>

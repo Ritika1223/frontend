@@ -7,7 +7,11 @@ const API_URLS = {
   // ---------------------- REQUIRE TOKEN ---------------------- //
 
   OPERATORS: `${API_BASE_URL}/api/operators`,
+  OPERATORS_REQUESTS: `${API_BASE_URL}/api/operators/requests`,
   FIND_OPERATORS: (id) => `${API_BASE_URL}/api/operators/${id}`,
+
+  ACCEPT_OPERATOR_REQUEST: (id) => `${API_BASE_URL}/api/operators/accept/${id}`,
+  REJECT_OPERATOR_REQUEST: (id) => `${API_BASE_URL}/api/operators/reject/${id}`,
 };
 
 export default API_URLS;

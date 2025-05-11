@@ -12,6 +12,7 @@ import Login from './components/Login';
 import ProtectedRoute from './components/ProtectedRoute';
 import OperatorForm from './components/OperatorForm';
 import Footer from './components/Footer'; // Import the Footer component
+import OperatorRequestList from './components/OperatorRequestList';
 
 function AppContent() {
   const [showForm, setShowForm] = useState(false);
@@ -53,6 +54,14 @@ function AppContent() {
             element={
               <ProtectedRoute>
                 <OperatorsList />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/operators/requests"
+            element={
+              <ProtectedRoute>
+                <OperatorRequestList/>
               </ProtectedRoute>
             }
           />

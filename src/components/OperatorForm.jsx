@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import OperatorDropdown from './OperatorDropdown';
 import jsPDF from 'jspdf';
-// import API_URLS from '../ApIURLs';
+import API_URLS from '../ApIURLs';
 import { uploadFileToFirebase } from "../firebase/firebaseUpload";
+import Navbar from './Navbar';
 
 const statesData = {
   "Uttarakhand": ["Dehradun", "Haridwar", "Rishikesh", "Nainital", "Mussoorie", "Almora", "Haldwani"],
@@ -76,6 +77,7 @@ const OperatorForm = () => {
   const [openBusTypeDropdown, setOpenBusTypeDropdown] = useState([]);
   const [openBusModelDropdown, setOpenBusModelDropdown] = useState([]);
   const [isConfirmed, setIsConfirmed] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -97,23 +99,7 @@ const OperatorForm = () => {
     }));
   };
 
-  const addPhoneNumber = () => {
-    setFormData(prev => ({
-      ...prev,
-      phoneNumbers: [...prev.phoneNumbers, { primary: '', alternate: '' }]
-    }));
-  };
-
-  const removePhoneNumber = (index) => {
-    if (formData.phoneNumbers.length > 1) {
-      const newPhoneNumbers = formData.phoneNumbers.filter((_, i) => i !== index);
-      setFormData(prev => ({
-        ...prev,
-        phoneNumbers: newPhoneNumbers
-      }));
-    }
-  };
-
+ 
   const handleEmailChange = (index, type, value) => {
     const newEmails = [...formData.emails];
     newEmails[index] = {
@@ -126,23 +112,7 @@ const OperatorForm = () => {
     }));
   };
 
-  const addEmail = () => {
-    setFormData(prev => ({
-      ...prev,
-      emails: [...prev.emails, { email: '', alternate: '' }]
-    }));
-  };
-
-  const removeEmail = (index) => {
-    if (formData.emails.length > 1) {
-      const newEmails = formData.emails.filter((_, i) => i !== index);
-      setFormData(prev => ({
-        ...prev,
-        emails: newEmails
-      }));
-    }
-  };
-
+ 
   const handleStateSelect = (state) => {
     setFormData(prev => ({
       ...prev,
@@ -203,27 +173,63 @@ const OperatorForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
     try {
-        const response = await fetch("https://webhook.site/41d0ba6e-d90e-45f8-a975-93b40bb36f5c", {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(formData)
-        });
+      // Copy formData to prevent mutating original state
+      const dataToSend = { ...formData };
 
-        if (!response.ok) {
-            throw new Error('Failed to submit form');
-        }
+      // Helper to upload one file
+      const uploadFile = async (file) => {
+        if (!file) return null;
+        if (typeof file === 'string') return file;
+        return await uploadFileToFirebase(file);
+      };
 
-        const data = await response.json();
-        console.log('Form submitted successfully:', data);
-        // You can add a success message or redirect here
-        alert('Form submitted successfully!');
+      // Helper to upload array of files
+      const uploadFilesArray = async (arr) => {
+        if (!Array.isArray(arr)) return [];
+        const results = await Promise.all(arr.map(file => uploadFile(file)));
+        return results.filter(Boolean);
+      };
+
+      // Upload all relevant files and replace in dataToSend
+      // Single files
+      dataToSend.gstinFile = await uploadFile(formData.gstinFile);
+      dataToSend.addressProof = await uploadFile(formData.addressProof);
+      dataToSend.cancelCheque = await uploadFile(formData.cancelCheque);
+      dataToSend.photo1 = await uploadFile(formData.photo1);
+      dataToSend.photo2 = await uploadFile(formData.photo2);
+      dataToSend.digitalSignature = await uploadFile(formData.digitalSignature);
+
+      // Arrays of files
+      dataToSend.officePhotos = await uploadFilesArray(formData.officePhotos);
+      dataToSend.aadharCards = await uploadFilesArray(formData.aadharCards);
+      dataToSend.panCards = await uploadFilesArray(formData.panCards);
+      if (formData.gstCertificates) dataToSend.gstCertificates = await uploadFilesArray(formData.gstCertificates);
+      if (formData.bankDetails) dataToSend.bankDetails = await uploadFilesArray(formData.bankDetails);
+
+      // Send to webhook
+      const response = await fetch(API_URLS.OPERATORS, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(dataToSend)
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to submit form');
+      }
+      // Try to read JSON, otherwise fallback
+      let data = null;
+      try { data = await response.json(); } catch (err) {}
+      console.log('Form submitted successfully:', data);
+      alert('Form submitted successfully!');
     } catch (error) {
-        console.error('Error submitting form:', error);
-        alert('Error submitting form. Please try again.');
+      console.error('Error submitting form:', error);
+      alert('Error submitting form. Please try again.');
     }
+    setIsSubmitting(false);
   };
 
   const handleFileChange = (field, idx, file) => {
@@ -251,70 +257,92 @@ const OperatorForm = () => {
 
   // PDF generation function
   const handleDownloadPDF = () => {
-    const doc = new jsPDF();
-    let y = 15;
-    doc.setFontSize(18);
-    doc.text('Operator Registration Details', 14, y);
-    y += 10;
-    doc.setFontSize(12);
-    doc.text('Personal Details', 14, y);
-    y += 8;
-    doc.setFont('helvetica', 'bold');
-    doc.text('Operator Name:', 14, y);
-    doc.setFont('helvetica', 'normal');
-    doc.text(formData.name || '', 60, y);
-    y += 7;
-    doc.setFont('helvetica', 'bold');
-    doc.text('Business Name:', 14, y);
-    doc.setFont('helvetica', 'normal');
-    doc.text(formData.companyName || '', 60, y);
-    y += 7;
-    doc.setFont('helvetica', 'bold');
-    doc.text('Office Location:', 14, y);
-    doc.setFont('helvetica', 'normal');
-    doc.text(formData.officeLocation || '', 60, y);
-    y += 10;
-    doc.setFont('helvetica', 'bold');
-    doc.text('Contact Numbers:', 14, y);
-    doc.setFont('helvetica', 'normal');
-    (formData.phoneNumbers || []).forEach((p, i) => {
-      doc.text(`- ${p.primary || ''}${p.alternate ? ', ' + p.alternate : ''}`, 20, y + 7 + i * 6);
-    });
-    y += 7 + (formData.phoneNumbers?.length || 1) * 6;
-    doc.setFont('helvetica', 'bold');
-    doc.text('Email Addresses:', 14, y);
-    doc.setFont('helvetica', 'normal');
-    (formData.emails || []).forEach((e, i) => {
-      doc.text(`- ${e.email || ''}${e.alternate ? ', ' + e.alternate : ''}`, 20, y + 7 + i * 6);
-    });
-    y += 7 + (formData.emails?.length || 1) * 6;
-    doc.setFont('helvetica', 'bold');
-    doc.text('KYC:', 14, y);
-    y += 7;
-    doc.setFont('helvetica', 'normal');
-    doc.text(`Aadhar: ${formData.aadharCards?.length ? 'Attached' : 'Not attached'}`, 20, y);
-    y += 6;
-    doc.text(`PAN: ${formData.panCards?.length ? 'Attached' : 'Not attached'}`, 20, y);
-    y += 6;
-    doc.text(`Address Proof: ${formData.addressProof ? 'Attached' : 'Not attached'}`, 20, y);
-    y += 6;
-    doc.text(`Bank Account: ${formData.accountNumber || ''}`, 20, y);
-    y += 6;
-    doc.text(`IFSC: ${formData.ifscCode || ''}`, 20, y);
-    y += 6;
-    doc.text(`Cancelled Cheque: ${formData.cancelCheque ? 'Attached' : 'Not attached'}`, 20, y);
-    y += 6;
-    doc.text(`Digital Signature: ${formData.digitalSignature ? 'Attached' : 'Not attached'}`, 20, y);
-    y += 10;
-    doc.setFont('helvetica', 'bold');
-    doc.text('Buses:', 14, y);
-    doc.setFont('helvetica', 'normal');
-    (formData.buses || []).forEach((b, i) => {
-      doc.text(`- ${b.busType || ''} ${b.busModel ? '(' + b.busModel + ')' : ''}`, 20, y + 7 + i * 6);
-    });
-    y += 7 + (formData.buses?.length || 1) * 6;
-    doc.save('Operator-Registration-Details.pdf');
-  };
+  const doc = new jsPDF();
+  let y = 20;
+
+  const sectionSpacing = 10;
+  const lineSpacing = 6;
+
+  // Header
+  doc.setFontSize(18);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Operator Registration Details', 14, y);
+  y += sectionSpacing;
+
+  // Section: Personal Details
+  doc.setFontSize(14);
+  doc.text('Personal Details', 14, y);
+  y += lineSpacing;
+
+  doc.setFontSize(12);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Operator Name:', 14, y);
+  doc.setFont('helvetica', 'normal');
+  doc.text(formData.name || '-', 60, y);
+  y += lineSpacing;
+
+  doc.setFont('helvetica', 'bold');
+  doc.text('Business Name:', 14, y);
+  doc.setFont('helvetica', 'normal');
+  doc.text(formData.companyName || '-', 60, y);
+  y += lineSpacing;
+
+  doc.setFont('helvetica', 'bold');
+  doc.text('Office Location:', 14, y);
+  doc.setFont('helvetica', 'normal');
+  doc.text(formData.officeLocation || '-', 60, y);
+  y += sectionSpacing;
+
+  // Section: Contact Numbers
+  doc.setFont('helvetica', 'bold');
+  doc.text('Contact Numbers:', 14, y);
+  doc.setFont('helvetica', 'normal');
+  (formData.phoneNumbers || []).forEach((p, i) => {
+    doc.text(`• ${p.primary || '-'}${p.alternate ? ', Alt: ' + p.alternate : ''}`, 20, y + (i + 1) * lineSpacing);
+  });
+  y += (formData.phoneNumbers?.length || 1) * lineSpacing + 4;
+
+  // Section: Emails
+  doc.setFont('helvetica', 'bold');
+  doc.text('Email Addresses:', 14, y);
+  doc.setFont('helvetica', 'normal');
+  (formData.emails || []).forEach((e, i) => {
+    doc.text(`• ${e.email || '-'}${e.alternate ? ', Alt: ' + e.alternate : ''}`, 20, y + (i + 1) * lineSpacing);
+  });
+  y += (formData.emails?.length || 1) * lineSpacing + 4;
+
+  // Section: KYC
+  doc.setFont('helvetica', 'bold');
+  doc.text('KYC Documents:', 14, y);
+  y += lineSpacing;
+  doc.setFont('helvetica', 'normal');
+  doc.text(`• Aadhar: ${formData.aadharCards?.length ? 'Attached' : 'Not attached'}`, 20, y);
+  y += lineSpacing;
+  doc.text(`• PAN: ${formData.panCards?.length ? 'Attached' : 'Not attached'}`, 20, y);
+  y += lineSpacing;
+  doc.text(`• Address Proof: ${formData.addressProof ? 'Attached' : 'Not attached'}`, 20, y);
+  y += lineSpacing;
+  doc.text(`• Bank Account No: ${formData.accountNumber || '-'}`, 20, y);
+  y += lineSpacing;
+  doc.text(`• IFSC: ${formData.ifscCode || '-'}`, 20, y);
+  y += lineSpacing;
+  doc.text(`• Cancelled Cheque: ${formData.cancelCheque ? 'Attached' : 'Not attached'}`, 20, y);
+  y += lineSpacing;
+  doc.text(`• Digital Signature: ${formData.digitalSignature ? 'Attached' : 'Not attached'}`, 20, y);
+  y += sectionSpacing;
+
+  // Section: Buses
+  doc.setFont('helvetica', 'bold');
+  doc.text('Buses:', 14, y);
+  doc.setFont('helvetica', 'normal');
+  (formData.buses || []).forEach((b, i) => {
+    doc.text(`• ${b.busType || '-'}${b.busModel ? ' (' + b.busModel + ')' : ''}`, 20, y + (i + 1) * lineSpacing);
+  });
+  y += (formData.buses?.length || 1) * lineSpacing;
+
+  // Save
+  doc.save('Operator-Registration-Details.pdf');
+};
 
   // Ensure dropdown state arrays grow with buses
   useEffect(() => {
@@ -332,35 +360,25 @@ const OperatorForm = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Fixed Header */}
-      <div className="fixed top-0 left-0 right-0 z-[100] shadow-lg">
-        <div className="relative w-full bg-gradient-to-br from-[#3B4B96] via-[#4F5FA8] to-[#2C3A7D] text-white overflow-hidden">
-          <div className="max-w-4xl mx-auto px-4 flex flex-col items-center justify-center py-2 sm:py-3 animate-fade-in">
-            <div className="flex items-center gap-2 mb-0.5 sm:mb-1">
-              <img src="/bus.png" alt="Bus" className="w-7 h-7 sm:w-9 sm:h-9 object-contain drop-shadow-lg" />
-              <h1 className="text-lg sm:text-2xl font-extrabold tracking-tight drop-shadow-lg">Bus Operator Registration Form</h1>
+      <Navbar/>
+      <hr></hr>
+
+      <div className="max-w-4xl mx-auto pt-5 ">
+       
+         <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-lg p-6 space-y-8">
+          {/* Modal Loader Overlay */}
+          {isSubmitting && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+              <div className="bg-white rounded-xl p-8 flex flex-col items-center shadow-lg">
+                <svg className="w-14 h-14 animate-spin text-[#3B4B96] mb-4" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <div className="text-[#3B4B96] font-bold text-lg">Processing, please wait…</div>
+              </div>
             </div>
-            <p className="mt-0.5 sm:mt-1 text-white/90 text-xs sm:text-base font-medium animate-fade-in delay-100 text-center">
-              Attach your buses, tempo travellers, minibuses and cars.<br />
-              Please share the following details for us to onboard you.
-            </p>
-          </div>
-        </div>
-      </div>
+          )}
 
-      <div className="max-w-4xl mx-auto px-4 pt-32 sm:pt-36 pb-8 mb-12">
-        {/* Back Button */}
-        <button
-          onClick={() => navigate('/')}
-          className="mb-8 flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
-        >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-          </svg>
-          Back to Home
-        </button>
-
-        <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-lg p-6 space-y-8">
           {/* Personal Details Section */}
           <div className="bg-white rounded-xl p-4 sm:p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-300">
             <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4 sm:mb-6 flex items-center gap-2">
@@ -485,31 +503,7 @@ const OperatorForm = () => {
                       className="w-full px-3 sm:px-4 py-2 sm:py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#3B4B96] focus:border-transparent transition-all duration-300 hover:border-[#3B4B96]/50 text-sm sm:text-base"
                     />
                   </div>
-                  <div className="flex gap-2 col-span-1 sm:col-span-2">
-                    {index === 0 ? (
-                      <button
-                        type="button"
-                        onClick={addEmail}
-                        className="px-3 py-2 bg-[#3B4B96] text-white rounded-lg hover:bg-[#2C3A7D] transition-colors duration-300 flex items-center gap-2 text-sm"
-                      >
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                        </svg>
-                        Add Another Email
-                      </button>
-                    ) : (
-                      <button
-                        type="button"
-                        onClick={() => removeEmail(index)}
-                        className="px-3 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors duration-300 flex items-center gap-2 text-sm"
-                      >
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                        Remove Email
-                      </button>
-                    )}
-                  </div>
+                  
                 </div>
               ))}
             </div>
@@ -539,31 +533,7 @@ const OperatorForm = () => {
                       required
                     />
                   </div>
-                  <div className="flex gap-2 col-span-1 sm:col-span-2">
-                    {index === 0 ? (
-                      <button
-                        type="button"
-                        onClick={addPhoneNumber}
-                        className="px-3 py-2 bg-[#3B4B96] text-white rounded-lg hover:bg-[#2C3A7D] transition-colors duration-300 flex items-center gap-2 text-sm"
-                      >
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                        </svg>
-                        Add Another Number
-                      </button>
-                    ) : (
-                      <button
-                        type="button"
-                        onClick={() => removePhoneNumber(index)}
-                        className="px-3 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors duration-300 flex items-center gap-2 text-sm"
-                      >
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                        Remove Number
-                      </button>
-                    )}
-                  </div>
+                 
                 </div>
               ))}
             </div>
@@ -799,9 +769,9 @@ const OperatorForm = () => {
                     </label>
                     <div className="flex gap-2 mt-2 sm:mt-0">
                       {formData.aadharCards.length > 1 && (
-                        <button 
-                          type="button" 
-                          onClick={() => removeFile('aadharCards', idx)} 
+                        <button
+                          type="button"
+                          onClick={() => removeFile('aadharCards', idx)}
                           className="text-red-500 hover:text-red-700 flex items-center justify-center h-12 w-12 border border-red-200 rounded-lg bg-white"
                         >
                           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -810,9 +780,9 @@ const OperatorForm = () => {
                         </button>
                       )}
                       {idx === formData.aadharCards.length - 1 && (
-                        <button 
-                          type="button" 
-                          onClick={() => addFile('aadharCards')} 
+                        <button
+                          type="button"
+                          onClick={() => addFile('aadharCards')}
                           className="px-4 py-2 bg-[#3B4B96] text-white rounded-lg hover:bg-[#2C3A7D] flex items-center gap-2 h-12"
                         >
                           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -844,9 +814,9 @@ const OperatorForm = () => {
                     </label>
                     <div className="flex gap-2 mt-2 sm:mt-0">
                       {formData.panCards.length > 1 && (
-                        <button 
-                          type="button" 
-                          onClick={() => removeFile('panCards', idx)} 
+                        <button
+                          type="button"
+                          onClick={() => removeFile('panCards', idx)}
                           className="text-red-500 hover:text-red-700 flex items-center justify-center h-12 w-12 border border-red-200 rounded-lg bg-white"
                         >
                           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -855,9 +825,9 @@ const OperatorForm = () => {
                         </button>
                       )}
                       {idx === formData.panCards.length - 1 && (
-                        <button 
-                          type="button" 
-                          onClick={() => addFile('panCards')} 
+                        <button
+                          type="button"
+                          onClick={() => addFile('panCards')}
                           className="px-4 py-2 bg-[#3B4B96] text-white rounded-lg hover:bg-[#2C3A7D] flex items-center gap-2 h-12"
                         >
                           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -996,8 +966,8 @@ const OperatorForm = () => {
             </div>
             <button
               type="submit"
-              className={`px-6 py-2.5 rounded-lg flex items-center gap-2 justify-center font-semibold transition-all duration-300 w-full sm:w-auto ${isConfirmed ? 'bg-[#3B4B96] text-white hover:bg-[#2C3A7D]' : 'bg-gray-300 text-gray-500 cursor-not-allowed'}`}
-              disabled={!isConfirmed}
+              className={`px-6 py-2.5 rounded-lg flex items-center gap-2 justify-center font-semibold transition-all duration-300 w-full sm:w-auto ${isConfirmed && !isSubmitting ? 'bg-[#3B4B96] text-white hover:bg-[#2C3A7D]' : 'bg-gray-300 text-gray-500 cursor-not-allowed'}`}
+              disabled={!isConfirmed || isSubmitting}
             >
               Submit
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1023,4 +993,4 @@ export default OperatorForm;
   animation: fade-in 0.8s cubic-bezier(0.4,0,0.2,1) both;
 }
 `}
-</style> 
+</style>
