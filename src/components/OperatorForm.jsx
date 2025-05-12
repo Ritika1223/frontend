@@ -366,6 +366,9 @@ const OperatorForm = () => {
       <div className="max-w-4xl mx-auto pt-5 ">
        
          <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-lg p-6 space-y-8">
+         {/* Form Heading */}
+        <h2 className="text-2xl font-bold text-center text-[#3B4B96]">Operator Registration Form</h2>
+
           {/* Modal Loader Overlay */}
           {isSubmitting && (
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
@@ -465,7 +468,7 @@ const OperatorForm = () => {
                         <button
                           type="button"
                           onClick={() => setFormData(prev => ({ ...prev, officePhotos: [...prev.officePhotos, null] }))}
-                          className="px-4 py-2 bg-[#3B4B96] text-white rounded-lg hover:bg-[#2C3A7D] flex items-center gap-2 h-12"
+                          className="bg-gradient-to-r from-[#3B4B96] to-[#FF5722] text-white px-6 py-2 rounded-xl hover:bg-[#3B4B96] hover:text-white transition-all duration-300 flex items-center group shadow-sm hover:shadow-md transform hover:-translate-y-0.5"
                         >
                           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
@@ -662,7 +665,7 @@ const OperatorForm = () => {
                 <button
                   type="button"
                   onClick={addBus}
-                  className="w-full sm:w-auto px-4 py-2.5 bg-[#3B4B96] text-white rounded-lg hover:bg-[#2C3A7D] transition-colors duration-300 flex items-center justify-center gap-2 text-sm sm:text-base"
+                  className="bg-gradient-to-r from-[#3B4B96] to-[#FF5722] text-white px-6 py-2 rounded-xl hover:bg-[#3B4B96] hover:text-white transition-all duration-300 flex items-center group shadow-sm hover:shadow-md transform hover:-translate-y-0.5"
                 >
                   <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
@@ -767,31 +770,7 @@ const OperatorForm = () => {
                         {file ? file.name : '+ Attach Aadhar card'}
                       </span>
                     </label>
-                    <div className="flex gap-2 mt-2 sm:mt-0">
-                      {formData.aadharCards.length > 1 && (
-                        <button
-                          type="button"
-                          onClick={() => removeFile('aadharCards', idx)}
-                          className="text-red-500 hover:text-red-700 flex items-center justify-center h-12 w-12 border border-red-200 rounded-lg bg-white"
-                        >
-                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                          </svg>
-                        </button>
-                      )}
-                      {idx === formData.aadharCards.length - 1 && (
-                        <button
-                          type="button"
-                          onClick={() => addFile('aadharCards')}
-                          className="px-4 py-2 bg-[#3B4B96] text-white rounded-lg hover:bg-[#2C3A7D] flex items-center gap-2 h-12"
-                        >
-                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                          </svg>
-                          <span className="hidden sm:inline">Add More</span>
-                        </button>
-                      )}
-                    </div>
+                    
                   </div>
                 ))}
               </div>
@@ -812,31 +791,7 @@ const OperatorForm = () => {
                         {file ? file.name : '+ Attach PAN card'}
                       </span>
                     </label>
-                    <div className="flex gap-2 mt-2 sm:mt-0">
-                      {formData.panCards.length > 1 && (
-                        <button
-                          type="button"
-                          onClick={() => removeFile('panCards', idx)}
-                          className="text-red-500 hover:text-red-700 flex items-center justify-center h-12 w-12 border border-red-200 rounded-lg bg-white"
-                        >
-                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                          </svg>
-                        </button>
-                      )}
-                      {idx === formData.panCards.length - 1 && (
-                        <button
-                          type="button"
-                          onClick={() => addFile('panCards')}
-                          className="px-4 py-2 bg-[#3B4B96] text-white rounded-lg hover:bg-[#2C3A7D] flex items-center gap-2 h-12"
-                        >
-                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                          </svg>
-                          <span className="hidden sm:inline">Add More</span>
-                        </button>
-                      )}
-                    </div>
+                    
                   </div>
                 ))}
               </div>
@@ -906,23 +861,13 @@ const OperatorForm = () => {
                       {formData.photo1 ? formData.photo1.name : '+ Attach Photo 1'}
                     </span>
                   </label>
-                  <label className="flex-1 flex items-center gap-2 cursor-pointer border border-[#3B4B96] rounded-lg px-3 py-2 h-12 sm:h-12 hover:bg-[#f3f4f6] transition-colors">
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={e => setFormData(prev => ({ ...prev, photo2: e.target.files[0] }))}
-                      className="hidden"
-                    />
-                    <span className="text-sm sm:text-base text-[#3B4B96] font-medium truncate">
-                      {formData.photo2 ? formData.photo2.name : '+ Attach Photo 2'}
-                    </span>
-                  </label>
+                 
                 </div>
               </div>
 
               {/* Digital Signature FIFTH */}
               <div className="space-y-2">
-                <label className="block text-sm sm:text-base font-semibold text-gray-900">Digital Signature</label>
+                <label className="block text-sm sm:text-base font-semibold text-gray-900"> Signature</label>
                 <label className="flex items-center gap-2 cursor-pointer border border-[#3B4B96] rounded-lg px-3 py-2 h-12 hover:bg-[#f3f4f6] transition-colors">
                   <input
                     type="file"
@@ -931,7 +876,7 @@ const OperatorForm = () => {
                     className="hidden"
                   />
                   <span className="text-sm sm:text-base text-[#3B4B96] font-medium truncate">
-                    {formData.digitalSignature ? formData.digitalSignature.name : '+ Upload Digital Signature'}
+                    {formData.digitalSignature ? formData.digitalSignature.name : '+ Upload  Signature'}
                   </span>
                 </label>
               </div>
@@ -966,7 +911,10 @@ const OperatorForm = () => {
             </div>
             <button
               type="submit"
-              className={`px-6 py-2.5 rounded-lg flex items-center gap-2 justify-center font-semibold transition-all duration-300 w-full sm:w-auto ${isConfirmed && !isSubmitting ? 'bg-[#3B4B96] text-white hover:bg-[#2C3A7D]' : 'bg-gray-300 text-gray-500 cursor-not-allowed'}`}
+className={`px-6 py-2 rounded-xl flex items-center gap-2 justify-center font-semibold transition-all duration-300 w-full sm:w-auto
+  ${isConfirmed && !isSubmitting 
+    ? 'bg-gradient-to-r from-[#3B4B96] to-[#FF5722] text-white hover:bg-[#3B4B96] hover:text-white shadow-sm hover:shadow-md transform hover:-translate-y-0.5' 
+    : 'bg-gray-300 text-gray-500 cursor-not-allowed'}`}
               disabled={!isConfirmed || isSubmitting}
             >
               Submit
@@ -983,14 +931,4 @@ const OperatorForm = () => {
 
 export default OperatorForm;
 
-<style>
-{`
-@keyframes fade-in {
-  from { opacity: 0; transform: translateY(-20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-.animate-fade-in {
-  animation: fade-in 0.8s cubic-bezier(0.4,0,0.2,1) both;
-}
-`}
-</style>
+

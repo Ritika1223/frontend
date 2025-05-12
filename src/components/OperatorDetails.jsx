@@ -9,52 +9,50 @@ const OperatorDetails = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [request, setRequest] = useState(false);
-const handelAccept = async () => {
-  const token = localStorage.getItem('userToken');
+  const handelAccept = async () => {
+    const token = localStorage.getItem("userToken");
 
+    try {
+      const response = await fetch(API_URLS.ACCEPT_OPERATOR_REQUEST(id), {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
 
-  try {
-    const response = await fetch(API_URLS.ACCEPT_OPERATOR_REQUEST(id), {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    });
+      if (!response.ok) {
+        throw new Error("Failed to accept operator");
+      }
 
-    if (!response.ok) {
-      throw new Error('Failed to accept operator');
+      navigate("/operators/requests");
+    } catch (error) {
+      console.error("Error accepting operator:", error);
     }
+  };
 
+  const handelReject = async () => {
+    const token = localStorage.getItem("userToken");
 
-    navigate("/operators/requests");
-  } catch (error) {
-    console.error("Error accepting operator:", error);
-  }
-};
+    try {
+      const response = await fetch(API_URLS.REJECT_OPERATOR_REQUEST(id), {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
 
-const handelReject = async () => {
-  const token = localStorage.getItem('userToken');
+      if (!response.ok) {
+        throw new Error("Failed to reject operator");
+      }
 
-  try {
-    const response = await fetch(API_URLS.REJECT_OPERATOR_REQUEST(id), {
-      method: 'DELETE',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to reject operator');
+      console.log("Rejected operator:", id);
+      navigate("/operators/requests");
+    } catch (error) {
+      console.error("Error rejecting operator:", error);
     }
-
-    console.log("Rejected operator:", id);
-    navigate("/operators/requests");
-  } catch (error) {
-    console.error("Error rejecting operator:", error);
-  }
-};
+  };
 
   useEffect(() => {
     const fetchOperatorDetails = async () => {
@@ -83,7 +81,6 @@ const handelReject = async () => {
         const data = await response.json();
         setOperator(data);
         setRequest(data.approved);
-
       } catch (err) {
         setError(err.message);
       } finally {
@@ -221,8 +218,9 @@ const handelReject = async () => {
           {/* Accept/Decline Buttons on Right */}
           {!request && (
             <div className="flex gap-4">
-              <button className="flex items-center gap-2 bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-all duration-300"
-              onClick={handelAccept}
+              <button
+                className="flex items-center gap-2 bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-all duration-300"
+                onClick={handelAccept}
               >
                 <svg
                   className="w-5 h-5"
@@ -239,8 +237,9 @@ const handelReject = async () => {
                 </svg>
                 Accept
               </button>
-              <button className="flex items-center gap-2 bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-all duration-300"
-              onClick={handelReject}
+              <button
+                className="flex items-center gap-2 bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-all duration-300"
+                onClick={handelReject}
               >
                 <svg
                   className="w-5 h-5"
@@ -268,7 +267,9 @@ const handelReject = async () => {
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
               <div>
                 <h1 className="text-3xl font-bold mb-2">{operator.name}</h1>
-                <p className="text-white/80 text-lg">{operator.companyName}</p>
+                <p className="text-white/80 text-lg">
+                  {operator.companyName}, {operator.officeLocation}
+                </p>
               </div>
               <div className="bg-white/10 backdrop-blur-sm px-6 py-3 rounded-xl">
                 <p className="text-sm text-white/80">Registered on</p>
@@ -330,6 +331,32 @@ const handelReject = async () => {
                       </div>
                     ))}
                   </div>
+                  <div className="bg-gray-50 rounded-lg p-4">
+                    <h3 className="text-lg font-semibold text-[#FF5722] mb-4">
+                      Alternate Email Addresses
+                    </h3>
+                    {operator.emails.map((email, index) => (
+                      <div
+                        key={index}
+                        className="flex items-center gap-3 mb-3 bg-white p-3 rounded-lg shadow-sm"
+                      >
+                        <svg
+                          className="w-5 h-5 text-[#3B4B96]"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                          />
+                        </svg>
+                        <span className="text-gray-800">{email.alternate}</span>
+                      </div>
+                    ))}
+                  </div>
 
                   {/* Phone Numbers */}
                   <div className="bg-gray-50 rounded-lg p-4">
@@ -355,6 +382,32 @@ const handelReject = async () => {
                           />
                         </svg>
                         <span className="text-gray-800">{phone.primary}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="bg-gray-50 rounded-lg p-4">
+                    <h3 className="text-lg font-semibold text-[#FF5722] mb-4">
+                      Alternate Phone Numbers
+                    </h3>
+                    {operator.phoneNumbers.map((phone, index) => (
+                      <div
+                        key={index}
+                        className="flex items-center gap-3 mb-3 bg-white p-3 rounded-lg shadow-sm"
+                      >
+                        <svg
+                          className="w-5 h-5 text-[#3B4B96]"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+                          />
+                        </svg>
+                        <span className="text-gray-800">{phone.alternate}</span>
                       </div>
                     ))}
                   </div>
@@ -393,11 +446,7 @@ const handelReject = async () => {
                     </div>
                   </div>
                 </div>
-              </div>
-
-              {/* Buses Information */}
-              <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-lg transition-all duration-300">
-                <h2 className="text-2xl font-bold text-[#3B4B96] mb-6 flex items-center gap-3">
+                                <h2 className="text-2xl font-bold text-[#3B4B96] mb-6 flex items-center gap-3">
                   <div className="p-2 bg-[#3B4B96]/10 rounded-lg">
                     <svg
                       className="w-6 h-6 text-[#3B4B96]"
@@ -462,6 +511,11 @@ const handelReject = async () => {
                     ))}
                   </div>
                 </div>
+              </div>
+
+              {/* Buses Information */}
+              <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-lg transition-all duration-300">
+
 
                 {/* Documents Section */}
                 <div>
@@ -481,7 +535,7 @@ const handelReject = async () => {
                         />
                       </svg>
                     </div>
-                    Documents
+                    Documents Numbers
                   </h2>
 
                   {operator.gstinNumber && (
@@ -511,6 +565,340 @@ const handelReject = async () => {
                       </div>
                     </div>
                   )}
+                  <div className="bg-gray-50 p-4 rounded-lg">
+                    <div className="flex items-center gap-3 bg-white p-3 rounded-lg shadow-sm">
+                      <div className="p-2 bg-[#FF5722]/10 rounded-lg">
+                        <svg
+                          className="w-5 h-5 text-[#FF5722]"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                          />
+                        </svg>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-[#3B4B96]">
+                          Account Number
+                        </p>
+                        <p className="text-gray-600">
+                          {operator.accountNumber}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="bg-gray-50 p-4 rounded-lg">
+                    <div className="flex items-center gap-3 bg-white p-3 rounded-lg shadow-sm">
+                      <div className="p-2 bg-[#FF5722]/10 rounded-lg">
+                        <svg
+                          className="w-5 h-5 text-[#FF5722]"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                          />
+                        </svg>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-[#3B4B96]">
+                          IFSC Code
+                        </p>
+                        <p className="text-gray-600">{operator.ifscCode}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <h2 className="text-2xl font-bold text-[#3B4B96] mb-6 flex items-center gap-3">
+                    <div className="p-2 bg-[#3B4B96]/10 rounded-lg">
+                      <svg
+                        className="w-6 h-6 text-[#3B4B96]"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                        />
+                      </svg>
+                    </div>
+                    Attached Documents
+                  </h2>
+                  <div className="bg-gray-50 p-4 rounded-lg">
+                    <a
+                      href={operator.cancelCheque}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-3 bg-white p-3 rounded-lg shadow-sm hover:shadow-md transition"
+                    >
+                      <div className="p-2 bg-[#FF5722]/10 rounded-lg">
+                        <svg
+                          className="w-5 h-5 text-[#FF5722]"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                          />
+                        </svg>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-[#3B4B96]">
+                          Cancel Cheque
+                        </p>
+                        <p className="text-blue-600 underline break-all">
+                          Click to view
+                        </p>
+                      </div>
+                    </a>
+                  </div>
+                  <div className="bg-gray-50 p-4 rounded-lg">
+                    <a
+                      href={operator.addressProof}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-3 bg-white p-3 rounded-lg shadow-sm hover:shadow-md transition"
+                    >
+                      <div className="p-2 bg-[#FF5722]/10 rounded-lg">
+                        <svg
+                          className="w-5 h-5 text-[#FF5722]"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                          />
+                        </svg>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-[#3B4B96]">
+                          Address Proof
+                        </p>
+                        <p className="text-blue-600 underline break-all">
+                          Click to view
+                        </p>
+                      </div>
+                    </a>
+                  </div>
+                  <div className="bg-gray-50 p-4 rounded-lg">
+                    <a
+                      href={operator.digitalSignature}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-3 bg-white p-3 rounded-lg shadow-sm hover:shadow-md transition"
+                    >
+                      <div className="p-2 bg-[#FF5722]/10 rounded-lg">
+                        <svg
+                          className="w-5 h-5 text-[#FF5722]"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                          />
+                        </svg>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-[#3B4B96]">
+                          Digital Signature
+                        </p>
+                        <p className="text-blue-600 underline break-all">
+                          Click to view
+                        </p>
+                      </div>
+                    </a>
+                  </div>
+                  <div className="bg-gray-50 p-4 rounded-lg">
+                    <a
+                      href={operator.photo1}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-3 bg-white p-3 rounded-lg shadow-sm hover:shadow-md transition"
+                    >
+                      <div className="p-2 bg-[#FF5722]/10 rounded-lg">
+                        <svg
+                          className="w-5 h-5 text-[#FF5722]"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                          />
+                        </svg>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-[#3B4B96]">Photo1</p>
+                        <p className="text-blue-600 underline break-all">
+                          Click to view
+                        </p>
+                      </div>
+                    </a>
+                  </div>
+                  <div className="bg-gray-50 p-4 rounded-lg">
+                    <a
+                      href={operator.photo2}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-3 bg-white p-3 rounded-lg shadow-sm hover:shadow-md transition"
+                    >
+                      <div className="p-2 bg-[#FF5722]/10 rounded-lg">
+                        <svg
+                          className="w-5 h-5 text-[#FF5722]"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                          />
+                        </svg>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-[#3B4B96]">Photo2</p>
+                        <p className="text-blue-600 underline break-all">
+                          Click to view
+                        </p>
+                      </div>
+                    </a>
+                  </div>
+
+                  <div className="bg-gray-50 p-4 rounded-lg space-y-3">
+                    {operator.aadharCards?.map((url, index) => (
+                      <a
+                        key={index}
+                        href={url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-3 bg-white p-3 rounded-lg shadow-sm hover:bg-gray-100 transition"
+                      >
+                        <div className="p-2 bg-[#FF5722]/10 rounded-lg">
+                          <svg
+                            className="w-5 h-5 text-[#FF5722]"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                            />
+                          </svg>
+                        </div>
+                        <div>
+                          <p className="font-semibold text-[#3B4B96]">
+                            aadharCards {index + 1}
+                          </p>
+                          <p className="text-sm text-blue-600 underline">
+                            Click to view
+                          </p>
+                        </div>
+                      </a>
+                    ))}
+                  </div>
+                  <div className="bg-gray-50 p-4 rounded-lg space-y-3">
+                    {operator.panCards?.map((url, index) => (
+                      <a
+                        key={index}
+                        href={url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-3 bg-white p-3 rounded-lg shadow-sm hover:bg-gray-100 transition"
+                      >
+                        <div className="p-2 bg-[#FF5722]/10 rounded-lg">
+                          <svg
+                            className="w-5 h-5 text-[#FF5722]"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                            />
+                          </svg>
+                        </div>
+                        <div>
+                          <p className="font-semibold text-[#3B4B96]">
+                            panCards {index + 1}
+                          </p>
+                          <p className="text-sm text-blue-600 underline">
+                            Click to view
+                          </p>
+                        </div>
+                      </a>
+                    ))}
+                  </div>
+                  <div className="bg-gray-50 p-4 rounded-lg space-y-3">
+                    {operator.officePhotos?.map((url, index) => (
+                      <a
+                        key={index}
+                        href={url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-3 bg-white p-3 rounded-lg shadow-sm hover:bg-gray-100 transition"
+                      >
+                        <div className="p-2 bg-[#FF5722]/10 rounded-lg">
+                          <svg
+                            className="w-5 h-5 text-[#FF5722]"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                            />
+                          </svg>
+                        </div>
+                        <div>
+                          <p className="font-semibold text-[#3B4B96]">
+                            officePhotos {index + 1}
+                          </p>
+                          <p className="text-sm text-blue-600 underline">
+                            Click to view
+                          </p>
+                        </div>
+                      </a>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
