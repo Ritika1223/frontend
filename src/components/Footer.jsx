@@ -21,7 +21,7 @@ const Footer = () => {
           </a>
         </div>
         <Link to="/contact-us">
-          <button className="bg-blue-600 hover:bg-blue-800 text-white font-bold py-1 px-3 rounded-full shadow ml-auto md:ml-4">
+          <button className="bg-gradient-to-r from-[#3B4B96] to-[#FF5722] text-white px-6 py-2 rounded-xl hover:bg-[#3B4B96] hover:text-white transition-all duration-300 flex items-center group shadow-sm hover:shadow-md transform hover:-translate-y-0.5">
             Contact Us
           </button>
         </Link>

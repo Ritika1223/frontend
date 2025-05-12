@@ -58,7 +58,7 @@ const OperatorForm = () => {
     state: '',
     city: '',
     address: '',
-    buses: [{ busType: '', busModel: '' }],
+    buses: [{ busType: '', busModel: [] }],
     hasGSTIN: 'no',
     gstinNumber: '',
     gstinFile: null,
@@ -148,12 +148,33 @@ const OperatorForm = () => {
       const newBuses = [...prev.buses];
       newBuses[index] = {
         ...newBuses[index],
-        busModel
+      busModel: [] // reset selected models
       };
       return { ...prev, buses: newBuses };
     });
     setOpenBusModelDropdown(prev => prev.map((v, i) => (i === index ? false : v)));
   };
+  const handleBusModelToggle = (model, index) => {
+  setFormData(prev => {
+    const newBuses = [...prev.buses];
+    const currentModels = [...(newBuses[index].busModel || [])]; // create a fresh copy
+    const modelIndex = currentModels.indexOf(model);
+
+    if (modelIndex > -1) {
+      currentModels.splice(modelIndex, 1);
+    } else {
+      currentModels.push(model);
+    }
+
+    newBuses[index] = {
+      ...newBuses[index],
+      busModel: currentModels
+    };
+
+    return { ...prev, buses: newBuses };
+  });
+};
+
 
   const addBus = () => {
     setFormData(prev => ({
@@ -597,82 +618,84 @@ const OperatorForm = () => {
               <p className="text-sm sm:text-base text-gray-700">
                 Please add all the bus types and models you own
               </p>
-              <div className="space-y-6">
-                {formData.buses.map((bus, index) => (
-                  <div key={index} className="bg-white rounded-lg p-4 sm:p-6 border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-300">
-                    <div className="flex justify-between items-center mb-4">
-                      <h3 className="text-base sm:text-lg font-medium text-gray-900">Bus {index + 1}</h3>
-                      {formData.buses.length > 1 && (
-                        <button
-                          type="button"
-                          onClick={() => removeBus(index)}
-                          className="text-red-500 hover:text-red-700 flex items-center gap-1.5 text-sm"
-                        >
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                          </svg>
-                          Remove
-                        </button>
-                      )}
-                    </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-                      <div className="space-y-2">
-                        <label className="block text-sm font-medium text-gray-700">Bus Type</label>
-                        <OperatorDropdown
-                          options={busTypeOptions}
-                          value={bus.busType}
-                          onChange={(value) => handleBusTypeSelect(value, index)}
-                          placeholder="Select Bus Type"
-                          isOpen={!!openBusTypeDropdown[index]}
-                          onOpen={() => setOpenBusTypeDropdown(prev => {
-                            const arr = [...prev];
-                            arr[index] = true;
-                            return arr;
-                          })}
-                          onClose={() => setOpenBusTypeDropdown(prev => {
-                            const arr = [...prev];
-                            arr[index] = false;
-                            return arr;
-                          })}
-                          className="w-full text-sm sm:text-base"
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <label className="block text-sm font-medium text-gray-700">Bus Model</label>
-                        <OperatorDropdown
-                          options={bus.busType ? busModelOptions[bus.busType] : []}
-                          value={bus.busModel}
-                          onChange={(value) => handleBusModelSelect(value, index)}
-                          placeholder="Select Bus Model"
-                          isOpen={!!openBusModelDropdown[index]}
-                          onOpen={() => setOpenBusModelDropdown(prev => {
-                            const arr = [...prev];
-                            arr[index] = true;
-                            return arr;
-                          })}
-                          onClose={() => setOpenBusModelDropdown(prev => {
-                            const arr = [...prev];
-                            arr[index] = false;
-                            return arr;
-                          })}
-                          disabled={!bus.busType}
-                          className="w-full text-sm sm:text-base"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                ))}
-                <button
-                  type="button"
-                  onClick={addBus}
-                  className="bg-gradient-to-r from-[#3B4B96] to-[#FF5722] text-white px-6 py-2 rounded-xl hover:bg-[#3B4B96] hover:text-white transition-all duration-300 flex items-center group shadow-sm hover:shadow-md transform hover:-translate-y-0.5"
-                >
-                  <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                  </svg>
-                  Add Another Bus
-                </button>
-              </div>
+             <div className="space-y-6">
+  {formData.buses.map((bus, index) => (
+    <div key={index} className="bg-white rounded-lg p-4 sm:p-6 border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-300">
+      <div className="flex justify-between items-center mb-4">
+        <h3 className="text-base sm:text-lg font-medium text-gray-900">Bus {index + 1}</h3>
+        {formData.buses.length > 1 && (
+          <button
+            type="button"
+            onClick={() => removeBus(index)}
+            className="text-red-500 hover:text-red-700 flex items-center gap-1.5 text-sm"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+            Remove
+          </button>
+        )}
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+        {/* Bus Type Dropdown */}
+        <div className="space-y-2">
+          <label className="block text-sm font-medium text-gray-700">Bus Type</label>
+          <OperatorDropdown
+            options={busTypeOptions}
+            value={bus.busType}
+            onChange={(value) => handleBusTypeSelect(value, index)}
+            placeholder="Select Bus Type"
+            isOpen={!!openBusTypeDropdown[index]}
+            onOpen={() => setOpenBusTypeDropdown(prev => {
+              const arr = [...prev];
+              arr[index] = true;
+              return arr;
+            })}
+            onClose={() => setOpenBusTypeDropdown(prev => {
+              const arr = [...prev];
+              arr[index] = false;
+              return arr;
+            })}
+            className="w-full text-sm sm:text-base"
+          />
+        </div>
+
+        {/* Bus Model Multi-Select via Checkboxes */}
+        <div className="space-y-2">
+          <label className="block text-sm font-medium text-gray-700">Bus Model</label>
+          {bus.busType ? (
+            <div className="border rounded-md p-3 max-h-40 overflow-y-auto space-y-2 bg-gray-50">
+              {busModelOptions[bus.busType]?.map((model) => (
+                <label key={model} className="flex items-center gap-2 text-sm">
+                  <input
+                    type="checkbox"
+                    checked={bus.busModel.includes(model)}
+                    onChange={() => handleBusModelToggle(model, index)}
+                    className="accent-blue-600"
+                  />
+                  {model}
+                </label>
+              ))}
+            </div>
+          ) : (
+            <p className="text-sm text-gray-500 italic">Select a bus type to choose models</p>
+          )}
+        </div>
+      </div>
+    </div>
+  ))}
+  <button
+    type="button"
+    onClick={addBus}
+    className="bg-gradient-to-r from-[#3B4B96] to-[#FF5722] text-white px-6 py-2 rounded-xl hover:bg-[#3B4B96] hover:text-white transition-all duration-300 flex items-center group shadow-sm hover:shadow-md transform hover:-translate-y-0.5"
+  >
+    <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+    </svg>
+    Add Another Bus
+  </button>
+</div>
+
             </div>
           </div>
 
@@ -753,8 +776,10 @@ const OperatorForm = () => {
               </svg>
               KYC Documents
             </h2>
+            
             <div className="bg-gray-50 p-4 sm:p-6 rounded-lg border border-gray-200 space-y-8">
               {/* Aadhar Card FIRST */}
+              
               <div className="space-y-2">
                 <label className="block text-sm sm:text-base font-semibold text-gray-900">Aadhar Card</label>
                 {formData.aadharCards.map((file, idx) => (
