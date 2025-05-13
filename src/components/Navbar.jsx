@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import EnquiryForm from "./EnquiryForm";
+import { FaBus } from 'react-icons/fa';
+
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -63,7 +65,7 @@ const Navbar = () => {
             </div>
             <span className="relative">
               Toll Free 24x7 - 1800 1027 408
-              
+
             </span>
           </div>
 
@@ -188,9 +190,8 @@ const Navbar = () => {
                 </div>
                 <span>English</span>
                 <svg
-                  className={`w-4 h-4 ml-1 transition-transform duration-200 ${
-                    isLanguageOpen ? "rotate-180" : ""
-                  }`}
+                  className={`w-4 h-4 ml-1 transition-transform duration-200 ${isLanguageOpen ? "rotate-180" : ""
+                    }`}
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -231,7 +232,7 @@ const Navbar = () => {
               >
                 <img
                   className="h-12 w-auto"
-                  src="/logo2-removebg-preview.png"
+                  src=""
                   alt="ANT"
                 />
               </Link>
@@ -245,20 +246,9 @@ const Navbar = () => {
                   className="group relative px-3 py-2 cursor-pointer"
                 >
                   <div className="flex items-center space-x-2 text-gray-600 group-hover:text-[#3B4B96] transition-colors">
-                    <svg
-                      className="w-6 h-6"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={1.5}
-                        d="M4 4h16a2 2 0 012 2v12a2 2 0 01-2 2H4a2 2 0 01-2-2V6a2 2 0 012-2zm0 0l8 6 8-6M4 14h16M4 10h16"
-                      />
-                    </svg>
-                    <span className="font-medium"> AC Luxury Bus Hire</span>
+                    <FaBus className="w-5 h-5" />
+
+                    <span className="font-medium"> AC Deluxe Bus Hire</span>
                   </div>
                   <div className="absolute bottom-0 left-0 h-0.5 w-full bg-[#3B4B96] scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></div>
                 </div>
@@ -268,20 +258,9 @@ const Navbar = () => {
                   className="group relative px-3 py-2 cursor-pointer"
                 >
                   <div className="flex items-center space-x-2 text-gray-600 group-hover:text-[#3B4B96] transition-colors">
-                    <svg
-                      className="w-5 h-5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"
-                      />
-                    </svg>
-                    <span className="font-medium">AC Deluxe Bus Hire</span>
+                    <FaBus className="w-5 h-5" />
+
+                    <span className="font-medium">AC Luxury Bus Hire</span>
                   </div>
                   <div className="absolute bottom-0 left-0 h-0.5 w-full bg-[#3B4B96] scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></div>
                 </div>
@@ -291,19 +270,8 @@ const Navbar = () => {
                   className="group relative px-3 py-2 cursor-pointer"
                 >
                   <div className="flex items-center space-x-2 text-gray-600 group-hover:text-[#3B4B96] transition-colors">
-                    <svg
-                      className="w-5 h-5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064"
-                      />
-                    </svg>
+                    <FaBus className="w-5 h-5" />
+
                     <span className="font-medium">AC Sleeper Bus Hire</span>
                   </div>
                   <div className="absolute bottom-0 left-0 h-0.5 w-full bg-[#3B4B96] scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></div>
@@ -399,19 +367,8 @@ const Navbar = () => {
                 onClick={() => setShowEnquiryForm(true)}
                 className="flex items-center space-x-2 px-3 py-2 text-base font-medium text-gray-600 hover:text-[#3B4B96] hover:bg-[#3B4B96]/5 rounded-xl transition-colors cursor-pointer"
               >
-                <svg
-                  className="w-6 h-6"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={1.5}
-                    d="M4 4h16a2 2 0 012 2v12a2 2 0 01-2 2H4a2 2 0 01-2-2V6a2 2 0 012-2zm0 0l8 6 8-6M4 14h16M4 10h16"
-                  />
-                </svg>
+                <FaBus className="w-5 h-5" />
+
                 <span>AC Deluxe Bus Hire</span>
               </div>
 
@@ -419,19 +376,8 @@ const Navbar = () => {
                 onClick={() => setShowEnquiryForm(true)}
                 className="flex items-center space-x-2 px-3 py-2 text-base font-medium text-gray-600 hover:text-[#3B4B96] hover:bg-[#3B4B96]/5 rounded-xl transition-colors cursor-pointer"
               >
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"
-                  />
-                </svg>
+                <FaBus className="w-5 h-5" />
+
                 <span>AC Luxury bus Hire</span>
               </div>
 
@@ -439,43 +385,32 @@ const Navbar = () => {
                 onClick={() => setShowEnquiryForm(true)}
                 className="flex items-center space-x-2 px-3 py-2 text-base font-medium text-gray-600 hover:text-[#3B4B96] hover:bg-[#3B4B96]/5 rounded-xl transition-colors cursor-pointer"
               >
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064"
-                  />
-                </svg>
+                <FaBus className="w-5 h-5" />
+
                 <span>AC Sleeper Bus Hire</span>
               </div>
 
               <div className="border-t border-gray-200 pt-4 pb-3">
 
-              <a
-  href="tel:18001027408"
-  className="flex items-center space-x-2 px-3 py-2 text-base font-medium text-gray-600 hover:text-[#3B4B96] hover:bg-[#3B4B96]/5 rounded-xl transition-colors"
->
-  <svg
-    className="w-5 h-5"
-    fill="none"
-    stroke="currentColor"
-    viewBox="0 0 24 24"
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={2}
-      d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"
-    />
-  </svg>
-  <span>Call Us: 1800 1027 408</span>
-</a>
+                <a
+                  href="tel:18001027408"
+                  className="flex items-center space-x-2 px-3 py-2 text-base font-medium text-gray-600 hover:text-[#3B4B96] hover:bg-[#3B4B96]/5 rounded-xl transition-colors"
+                >
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"
+                    />
+                  </svg>
+                  <span>Call Us: 1800 1027 408</span>
+                </a>
 
                 <div className="flex items-center space-x-2 px-3 py-2 text-base font-medium text-gray-600 hover:text-[#FF5722] hover:bg-[#FF5722]/5 rounded-xl transition-colors">
                   <svg
@@ -498,7 +433,7 @@ const Navbar = () => {
                     </span>
                   </span>
                 </div>
-                
+
 
                 <div className="flex items-center space-x-2 px-3 py-2 text-base font-medium text-gray-600 hover:text-[#3B4B96] hover:bg-[#3B4B96]/5 rounded-xl transition-colors">
                   <svg

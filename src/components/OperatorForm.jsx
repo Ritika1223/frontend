@@ -911,16 +911,7 @@ const OperatorForm = () => {
           {/* Form Actions */}
           <div className="flex flex-col gap-4 pt-6 border-t border-gray-200">
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4 w-full">
-              <button
-                type="button"
-                onClick={handleDownloadPDF}
-                className="w-full sm:w-auto px-6 py-2.5 bg-white border-2 border-[#3B4B96] text-[#3B4B96] font-semibold rounded-lg hover:bg-[#3B4B96] hover:text-white transition-all duration-300 flex items-center gap-2 justify-center"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                </svg>
-                Download PDF of Details
-              </button>
+             
               <div className="flex items-center gap-2 w-full sm:w-auto">
                 <input
                   type="checkbox"

@@ -1,4 +1,4 @@
-const API_BASE_URL = "http://localhost:8080";
+const API_BASE_URL = "https://antbusbackend-2.onrender.com";
 
 const API_URLS = {
   // ---------------------- AUTH ---------------------- //
