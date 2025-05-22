@@ -140,10 +140,9 @@ function AppContent() {
           <Route
             path="/admin/dashboard"
             element={
-              <ProtectedRoute>
+              
                 <AdminDashboard/>
-              </ProtectedRoute>
-            }
+                          }
           />
           <Route
             path="/operator/:id"
