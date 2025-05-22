@@ -1,6 +1,6 @@
 import React from 'react';
-import ContactPopup from './ContactPopup';
-import EnquiryForm from './EnquiryForm';
+import ContactPopup from "../Pages/ContactPopup"; // if it's in src/Pages
+import EnquiryForm from '../Pages/EnquiryForm';
 
 const Home = ({ showContact, showForm, handleCloseContact, setShowForm }) => {
   return (

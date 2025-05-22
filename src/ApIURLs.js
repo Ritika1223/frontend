@@ -1,4 +1,4 @@
-const API_BASE_URL = "https://antbusbackend-2.onrender.com";
+const API_BASE_URL = "https://backend-1-wvxs.onrender.com";
 
 const API_URLS = {
   // ---------------------- AUTH ---------------------- //

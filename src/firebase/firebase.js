@@ -3,9 +3,9 @@ import { getStorage } from "firebase/storage"
 
 const firebaseConfig = {
   apiKey: "AIzaSyDiGprj74JwK7zj2PkFIlh5XMxlM4LhQrw",
-  authDomain: "abtbus-a9b90.firebaseapp.com",
-  projectId: "abtbus-a9b90",
-  storageBucket: "abtbus-a9b90.firebasestorage.app",
+  authDomain: "antbus-4a824.firebaseapp.com",
+  projectId: "antbus-4a824",
+  storageBucket: "antbus-4a824.firebasestorage.app",  // ✅ MUST MATCH bucket
   messagingSenderId: "264435738912",
   appId: "1:264435738912:web:c64da953866fb5879e8f45"
 };

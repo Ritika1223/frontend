@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import EnquiryForm from "./EnquiryForm";
+import EnquiryForm from "../Pages/EnquiryForm";
 import { FaBus } from 'react-icons/fa';
 
 
@@ -232,7 +232,7 @@ const Navbar = () => {
               >
                 <img
                   className="h-12 w-auto"
-                  src=""
+                  src="logo2-removebg-preview.png"
                   alt="ANT"
                 />
               </Link>
