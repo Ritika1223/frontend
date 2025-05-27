@@ -1,6 +1,6 @@
 // AppContent.jsx
 import { useState } from 'react';
-import { useLocation, Routes, Route } from 'react-router-dom';
+import { useLocation, Routes, Route,  Navigate } from 'react-router-dom';
 
 import ContactPopup from './Pages/ContactPopup';
 import EnquiryForm from './Pages/EnquiryForm';
@@ -14,6 +14,15 @@ import OperatorForm from './Pages/OperatorForm';
 import Footer from './components/Footer'; // Import the Footer component
 import OperatorRequestList from './Pages/OperatorRequestList';
 import AdminDashboard from './Pages/AdminDashboard';
+import Register from './Pages/Authentication/Register';
+import UserLogin from './Pages/Authentication/UserLogin';
+import UserDashboard from './Pages/Dashboard.jsx/UserDashboard';
+import Profile from './Pages/Dashboard.jsx/Profile';
+import MyBookings from './Pages/Dashboard.jsx/MyBookings';
+import Offers from './Pages/Dashboard.jsx/Offers';
+import Dashboard from './components/Dashboard';
+
+
 // ADMIN
 import ManageUser from './Pages/admin/admin/ManageUser';
 import AssignModules from './Pages/admin/admin/AssignModules';
@@ -144,6 +153,7 @@ function AppContent() {
                 <AdminDashboard/>
                           }
           />
+          
           <Route
             path="/operator/:id"
             element={
@@ -153,6 +163,27 @@ function AppContent() {
             }
           />
           <Route path="/contact-us" element={<ContactPopup />} />
+
+          <Route path="/register" element={<Register />} />
+                    <Route path="/user-login" element={<UserLogin />} />
+
+  
+  {/* DASHBOARD ROUTES NESTED */}
+<Route path="/" element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          >
+
+    <Route path="user/dashboard" element={<UserDashboard />} />
+    <Route path="dashboard/bookings" element={<MyBookings />} />
+    <Route path="dashboard/offers" element={<Offers />} />
+    <Route path="dashboard/profile" element={<Profile />} />
+  </Route>
+
+
+
    {/* ADMIN */}
           <Route path="/admin/admin/manage-user" element={<ManageUser />} />
           <Route path="/admin/admin/assign-modules" element={<AssignModules />} />

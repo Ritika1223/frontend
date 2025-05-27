@@ -1,6 +1,6 @@
 import React from 'react';
-import LoginForm from './LoginForm';
-import ImageCarousel from '../components/ImageCarousel'
+import UserLoginForm from './UserLoginForm';
+import ImageCarousel from '../../components/ImageCarousel';
 
 const Login = () => {
   return (
@@ -13,7 +13,7 @@ const Login = () => {
       {/* Right - Login Form */}
       <div className="w-full lg:w-2/5 flex items-center justify-center bg-white px-8">
         <div className="w-full max-w-md space-y-6">
-          <LoginForm />
+          <UserLoginForm />
         </div>
       </div>
     </div>

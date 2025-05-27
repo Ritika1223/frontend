@@ -13,6 +13,7 @@
         "@emailjs/browser": "^4.4.1",
         "@firebasegen/default-connector": "file:dataconnect-generated/js/default-connector",
         "@tailwindcss/vite": "^4.1.4",
+        "axios": "^1.9.0",
         "classnames": "^2.5.1",
         "date-fns": "^4.1.0",
         "firebase": "^11.7.1",
@@ -26,6 +27,7 @@
         "react-phone-input-2": "^2.15.1",
         "react-router-dom": "^6.30.0",
         "recharts": "^2.15.3",
+        "swiper": "^11.2.7",
         "uuid": "^11.1.0"
     },
     "devDependencies": {

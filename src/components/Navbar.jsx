@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import EnquiryForm from "../Pages/EnquiryForm";
-import { FaBus } from 'react-icons/fa';
+import {FaBus, FaUserCircle } from 'react-icons/fa';
 
 
 const Navbar = () => {
@@ -225,18 +225,18 @@ const Navbar = () => {
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex justify-between h-14">
             {/* Logo */}
-            <div className="flex-shrink-0 flex items-center">
-              <Link
-                to="/"
-                className="transform hover:scale-105 transition-transform duration-200"
-              >
-                <img
-                  className="h-12 w-auto"
-                  src="logo2-removebg-preview.png"
-                  alt="ANT"
-                />
-              </Link>
-            </div>
+            <div className="flex-shrink-0 flex items-center h-20">
+  <Link
+    to="/"
+    className="transform hover:scale-105 transition-transform duration-200"
+  >
+    <img
+      src="/ant logo removebg-preview (1).png"
+      alt="ANT"
+      className="h-24 w-auto object-contain"
+    />
+  </Link>
+</div>
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center justify-center flex-1">
@@ -325,6 +325,18 @@ const Navbar = () => {
                 </svg>
               </Link>
             </div>
+
+            <div className="flex items-center ml-3">
+  <Link
+    to="/register"
+    className="flex items-center text-gray-600 hover:text-[#3B4B96] transition-colors transform hover:scale-105"
+    title="Login / Register"
+  >
+    <FaUserCircle className="w-6 h-6 mr-1" />
+    <span className="text-sm font-medium hidden sm:inline">Login/Register</span>
+  </Link>
+</div>
+ 
 
             {/* Mobile menu button */}
             <div className="md:hidden flex items-center">
