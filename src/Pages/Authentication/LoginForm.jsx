@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import API_URLS from '../ApIURLs';
+import API_URLS from '../../ApIURLs';
 const Login = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -42,7 +42,7 @@ const Login = () => {
   console.log('Login successful, received token:', data.token);
 
   // Store token and user info
-  localStorage.setItem('token', data.token);
+
   localStorage.setItem('userData', JSON.stringify({
     username: data.username,
     role: data.role
@@ -50,12 +50,14 @@ const Login = () => {
 
   console.log('Token stored:', data.token);
   console.log('Logged in role:', data.role);
-const role = data.role.toUpperCase();
+const role = data.role ? data.role.toUpperCase() : ''; // Safe access
 
   // Redirect to operators page
   if (data.role === 'ADMIN') {
+      localStorage.setItem('token', data.token);
     navigate('/admin/dashboard');
   } else if (data.role === 'OPERATOR') {
+      localStorage.setItem('O_token', data.token);
     navigate('/operator/dashboard');
   } else {
     setError('Unknown role. Access denied.');

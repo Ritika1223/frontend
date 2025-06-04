@@ -12,9 +12,10 @@ const Dashboard = () => {
 
   
  const handleLogout = () => {
-  localStorage.removeItem("authToken"); // clear token
-  navigate("/user-login"); // redirect to login page
-};
+    localStorage.removeItem("token");
+    localStorage.removeItem("userData");
+    navigate("/user-login"); // or "/admin-login" if that's your route
+  };
 
   const menuItems = [
     { label: 'Home', path: '/user/dashboard', icon: Home },

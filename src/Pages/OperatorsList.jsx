@@ -9,14 +9,14 @@ const OperatorsList = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [modalOpen, setModalOpen] = useState(false);
 const [selectedOperator, setSelectedOperator] = useState(null);
-const [username, setUsername] = useState("");
+const [primaryPhoneNumber, setPrimaryPhoneNumber] = useState("");
 const [password, setPassword] = useState("");
 const [settingError, setSettingError] = useState("");
 const [settingLoading, setSettingLoading] = useState(false);
 
 const openModal = (operator) => {
   setSelectedOperator(operator);
-  setUsername("");
+  setPrimaryPhoneNumber("");
   setPassword("");
   setSettingError("");
   setModalOpen(true);
@@ -29,7 +29,7 @@ const closeModal = () => {
 };
 
 const submitCredentials = async () => {
-  if (!username || !password) {
+  if (!primaryPhoneNumber || !password) {
     setSettingError("Username and password are required.");
     return;
   }
@@ -43,7 +43,7 @@ const res = await fetch(API_URLS.SET_OPERATOR_CREDENTIALS(selectedOperator._id),
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({ username, password }),
+      body: JSON.stringify({ primaryPhoneNumber, password }),
     });
 
     const data = await res.json();
@@ -73,7 +73,7 @@ const res = await fetch(API_URLS.SET_OPERATOR_CREDENTIALS(selectedOperator._id),
   useEffect(() => {
     const fetchOperators = async () => {
       try {
-        const token = localStorage.getItem('userToken');
+        const token = localStorage.getItem('token');
         console.log('Token from localStorage:', token);
 
         if (!token) {
@@ -337,9 +337,9 @@ const res = await fetch(API_URLS.SET_OPERATOR_CREDENTIALS(selectedOperator._id),
       </h2>
       <input
         type="text"
-        placeholder="Username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
+        placeholder="phonenumber"
+        value={primaryPhoneNumber}
+        onChange={(e) => setPrimaryPhoneNumber(e.target.value)}
         className="w-full mb-3 p-2 border rounded"
       />
       <input

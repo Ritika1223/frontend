@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import DashboardCharts from './DashboardCharts';
 
-import { BrowserRouter, Routes, Route, Link, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Link, useLocation, useNavigate } from "react-router-dom";
 import {
   MdDashboard,
   MdAdminPanelSettings,
@@ -185,6 +185,7 @@ const SIDEBAR_MENUS = [
       { label: "Report & Request", path: "/admin/report-request" },
     ],
   },
+ 
 ];
 
 // Stat Cards
@@ -252,6 +253,8 @@ export { SIDEBAR_MENUS, STAT_CARDS };
 function SidebarMenu({ menus }) {
   const [openMenus, setOpenMenus] = useState({});
   const location = useLocation();
+    const navigate = useNavigate();
+
 
   function toggleMenu(index) {
     setOpenMenus((prev) => ({ ...prev, [index]: !prev[index] }));
@@ -261,6 +264,12 @@ function SidebarMenu({ menus }) {
 
   const isActiveParent = (submenu) => {
     return submenu?.some((item) => location.pathname === item.path);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("userData");
+    navigate("/login"); // or "/admin-login" if that's your route
   };
 
   return (
@@ -330,7 +339,15 @@ function SidebarMenu({ menus }) {
           </div>
         ))}
       </nav>
-
+ {/* Logout Button */}
+        <div className="mt-6 px-6">
+          <button
+            onClick={handleLogout}
+            className="w-full py-2 px-4 rounded-xl text-white bg-gradient-to-r from-red-500 to-red-700 hover:from-red-600 hover:to-red-800"
+          >
+            Logout
+          </button>
+        </div>
       <div className="mt-8 text-xs font-bold text-center text-white bg-gradient-to-r from-[#3B4B96] to-[#FF5722] py-3 rounded-xl shadow-lg">
         A N T SOFT SOLUTION
       </div>

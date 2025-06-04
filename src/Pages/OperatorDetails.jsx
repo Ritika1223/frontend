@@ -32,7 +32,7 @@ const OperatorDetails = () => {
   };
 
   const handelReject = async () => {
-    const token = localStorage.getItem("userToken");
+    const token = localStorage.getItem("token");
 
     try {
       const response = await fetch(API_URLS.REJECT_OPERATOR_REQUEST(id), {
@@ -57,7 +57,7 @@ const OperatorDetails = () => {
   useEffect(() => {
     const fetchOperatorDetails = async () => {
       try {
-        const token = localStorage.getItem("userToken");
+        const token = localStorage.getItem("token");
         if (!token) {
           throw new Error("No auth token found");
         }
@@ -179,7 +179,7 @@ const OperatorDetails = () => {
         <div className="text-center">
           <h2 className="text-xl text-gray-600">Operator not found</h2>
           <button
-            onClick={() => navigate("/operators")}
+            onClick={() => navigate("/admin/operator/manage-operator")}
             className="mt-4 bg-gradient-to-r from-[#3B4B96] to-[#FF5722] text-white px-6 py-2 rounded-lg hover:from-[#2C3A7D] hover:to-[#E64A19] transition-all duration-300"
           >
             Back to Operators List
@@ -196,7 +196,7 @@ const OperatorDetails = () => {
         <div className="flex justify-between items-center mb-6">
           {/* Back Button on Left */}
           <button
-            onClick={() => navigate("/operators")}
+            onClick={() => navigate("/admin/operator/manage-operator")}
             className="flex items-center gap-2 text-gray-600 hover:text-[#FF5722] transition-colors"
           >
             <svg

@@ -98,7 +98,7 @@ const handleVerify = async () => {
 
     console.log('Success:', response.data.message);
 console.log('Token:', response.data.token);
-localStorage.setItem('userToken', response.data.token); // Save token to local storage
+localStorage.setItem('token', response.data.token); // Save token to local storage
      navigate('/user/dashboard');
   } catch (error) {
     if (error.response) {

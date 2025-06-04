@@ -7,11 +7,74 @@ const OperatorsList = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
+   const [modalOpen, setModalOpen] = useState(false);
+  const [selectedOperator, setSelectedOperator] = useState(null);
+const [primaryPhoneNumber, setPrimaryPhoneNumber] = useState("");
+  const [password, setPassword] = useState("");
+  const [settingError, setSettingError] = useState("");
+  const [settingLoading, setSettingLoading] = useState(false);
+
+
+  const openModal = (operator) => {
+    setSelectedOperator(operator);
+  setPrimaryPhoneNumber("");
+    setPassword("");
+    setSettingError("");
+    setModalOpen(true);
+  };
+  
+  const closeModal = () => {
+    setModalOpen(false);
+    setSelectedOperator(null);
+    setSettingError("");
+  };
+  
+  const submitCredentials = async () => {
+  if (!primaryPhoneNumber || !password) {
+      setSettingError("PhoneNumber and password are required.");
+      return;
+    }
+  
+    try {
+      setSettingLoading(true);
+      setSettingError("");
+  
+  const res = await fetch(API_URLS.SET_OPERATOR_CREDENTIALS(selectedOperator._id), {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+      body: JSON.stringify({ primaryPhoneNumber, password }),
+      });
+  
+      const data = await res.json();
+  
+      if (!res.ok) {
+        throw new Error(data.message || "Failed to set credentials");
+      }
+  
+      alert("✅ Credentials set successfully");
+      closeModal();
+  
+      // Optionally update the UI
+      setOperators(prev =>
+        prev.map(op =>
+          op._id === selectedOperator._id ? { ...op, isCredentialSet: true } : op
+        )
+      );
+    } catch (err) {
+      console.error("❌ Error setting credentials:", err);
+      setSettingError(err.message);
+    } finally {
+      setSettingLoading(false);
+    }
+  };
+  
 
   useEffect(() => {
     const fetchOperators = async () => {
       try {
-        const token = localStorage.getItem('userToken');
+        const token = localStorage.getItem('token');
         console.log('Token from localStorage:', token);
 
         if (!token) {
@@ -229,6 +292,19 @@ const OperatorsList = () => {
                     </svg>
                   </button>
                 </div>
+                                <div className="mt-3 pt-3 border-t border-gray-100">
+
+                  {!operator.isCredentialSet ? (
+  <button
+                    className="w-full bg-gradient-to-r from-[#3B4B96] to-[#FF5722] text-white py-3 rounded-xl hover:from-[#2C3A7D] hover:to-[#E64A19] transition-all duration-300 flex items-center justify-center gap-2 group"
+    onClick={() => openModal(operator)}
+  >
+    Set Credentials
+  </button>
+) : (
+  <span className="text-green-600 font-semibold">Credentials Set</span>
+)}
+</div>
               </div>
             </div>
           ))}
@@ -254,9 +330,53 @@ const OperatorsList = () => {
             </button>
           </div>
         )}
+
+         {modalOpen && (
+  <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+    <div className="bg-white p-6 rounded shadow-lg w-80 max-w-full">
+      <h2 className="text-xl font-semibold mb-4">
+        Set Credentials for {selectedOperator?.name}
+      </h2>
+      <input
+        type="text"
+        placeholder="phonenumber"
+        value={primaryPhoneNumber}
+        onChange={(e) => setPrimaryPhoneNumber(e.target.value)}
+        className="w-full mb-3 p-2 border rounded"
+      />
+      <input
+        type="password"
+        placeholder="Password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        className="w-full mb-3 p-2 border rounded"
+      />
+      {settingError && (
+        <p className="text-red-600 mb-3">{settingError}</p>
+      )}
+      <div className="flex justify-end space-x-2">
+        <button
+          onClick={closeModal}
+          className="px-4 py-2 rounded border"
+          disabled={settingLoading}
+        >
+          Cancel
+        </button>
+        <button
+          onClick={submitCredentials}
+          className="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700"
+          disabled={settingLoading}
+        >
+          {settingLoading ? "Saving..." : "Save"}
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
       </div>
     </div>
   );
 };
-
+      
 export default OperatorsList; 
