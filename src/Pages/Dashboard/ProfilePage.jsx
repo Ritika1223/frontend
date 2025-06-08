@@ -4,34 +4,33 @@ import axios from 'axios';
 
 const ProfilePage = () => {
   const [isEditing, setIsEditing] = useState(false);
-  const storedUser = JSON.parse(localStorage.getItem('userData')); // includes id
+  const storedUser = JSON.parse(localStorage.getItem('userData'));
   const operatorId = storedUser?.id;
 
   const [profileData, setProfileData] = useState({
-    username: '',
-    password: '',
     name: '',
-    phone: ''
+    email: '',
+    phone: '',
+    password: ''
   });
+
   const [editData, setEditData] = useState({ ...profileData });
 
-useEffect(() => {
+  useEffect(() => {
     if (operatorId) {
       axios.get(`http://localhost:8080/api/operator/${operatorId}/profile`)
         .then(response => {
-          const { username, name, primaryPhoneNumber, password } = response.data;
-          setProfileData({
-            username,
-            password: '********', // mask in UI
-            name,
-            phone: primaryPhoneNumber
-          });
-          setEditData({
-            username,
-            password: '********',
-            name,
-            phone: primaryPhoneNumber
-          });
+          const { name, email, primaryPhoneNumber } = response.data;
+
+          const updatedData = {
+            name: name || '',
+            email: email || '',
+            phone: primaryPhoneNumber || '',
+            password: '********'
+          };
+
+          setProfileData(updatedData);
+          setEditData(updatedData);
         })
         .catch(error => {
           console.error('Failed to fetch operator profile:', error);
@@ -46,19 +45,18 @@ useEffect(() => {
 
   const handleSave = async () => {
     try {
-      // Make API call to update profile
       await axios.put('http://localhost:8080/api/operator/update', {
-        name: editData.firstName,
+        id: operatorId,
+        name: editData.name,
+        email: editData.email,
         primaryPhoneNumber: editData.phone,
-        // password: editData.password, // Only send this if the password is allowed to be changed
+        // password: editData.password !== '********' ? editData.password : undefined
       });
 
-      const updatedData = { ...editData };
-      setProfileData(updatedData);
+      setProfileData({ ...editData, password: '********' });
       setIsEditing(false);
 
-      // Sync to localStorage
-      localStorage.setItem('userData', JSON.stringify(updatedData));
+      localStorage.setItem('userData', JSON.stringify({ ...storedUser, ...editData }));
     } catch (error) {
       console.error('Failed to update profile:', error);
     }
@@ -70,7 +68,7 @@ useEffect(() => {
   };
 
   const handleInputChange = (field, value) => {
-    setEditData((prev) => ({ ...prev, [field]: value }));
+    setEditData(prev => ({ ...prev, [field]: value }));
   };
 
   return (
@@ -115,7 +113,7 @@ useEffect(() => {
               </div>
               <div>
                 <h3 className="text-lg font-semibold text-gray-900">
-                  {profileData.firstName}
+                  {profileData.name}
                 </h3>
                 <p className="text-gray-600">Operator</p>
               </div>
@@ -128,30 +126,26 @@ useEffect(() => {
                 {isEditing ? (
                   <input
                     type="text"
-                    value={editData.firstName}
-                    onChange={(e) => handleInputChange('firstName', e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    value={editData.name}
+                    onChange={(e) => handleInputChange('name', e.target.value)}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg"
                   />
                 ) : (
-                  <div className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-900">
-                    {profileData.firstName}
-                  </div>
+                  <div className="w-full px-4 py-3 bg-gray-50 border rounded-lg">{profileData.name}</div>
                 )}
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Username</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
                 {isEditing ? (
                   <input
-                    type="text"
-                    value={editData.username}
-                    onChange={(e) => handleInputChange('username', e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    type="email"
+                    value={editData.email}
+                    onChange={(e) => handleInputChange('email', e.target.value)}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg"
                   />
                 ) : (
-                  <div className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-900">
-                    {profileData.username}
-                  </div>
+                  <div className="w-full px-4 py-3 bg-gray-50 border rounded-lg">{profileData.email}</div>
                 )}
               </div>
 
@@ -162,12 +156,10 @@ useEffect(() => {
                     type="tel"
                     value={editData.phone}
                     onChange={(e) => handleInputChange('phone', e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg"
                   />
                 ) : (
-                  <div className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-900">
-                    {profileData.phone}
-                  </div>
+                  <div className="w-full px-4 py-3 bg-gray-50 border rounded-lg">{profileData.phone}</div>
                 )}
               </div>
 
@@ -178,11 +170,11 @@ useEffect(() => {
                     type="password"
                     value={editData.password}
                     onChange={(e) => handleInputChange('password', e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg"
                     placeholder="Enter new password"
                   />
                 ) : (
-                  <div className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-900 flex items-center">
+                  <div className="w-full px-4 py-3 bg-gray-50 border rounded-lg flex items-center">
                     <Lock className="w-4 h-4 mr-2 text-gray-500" />
                     {profileData.password}
                   </div>

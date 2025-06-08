@@ -1,66 +1,64 @@
 const API_BASE_URL = "http://localhost:8080";
 
 const API_URLS = {
-  // ----------------------ADMIN AUTH ---------------------- //
+  // ---------------------- ADMIN AUTH ---------------------- //
   LOGIN: `${API_BASE_URL}/api/auth/login`,
 
-  // ---------------------- REQUIRE TOKEN ---------------------- //
-
+  // ---------------------- OPERATOR MANAGEMENT (Require Token) ---------------------- //
   OPERATORS: `${API_BASE_URL}/api/operators`,
   OPERATORS_REQUESTS: `${API_BASE_URL}/api/operators/requests`,
   FIND_OPERATORS: (id) => `${API_BASE_URL}/api/operators/${id}`,
-
   ACCEPT_OPERATOR_REQUEST: (id) => `${API_BASE_URL}/api/operators/accept/${id}`,
   REJECT_OPERATOR_REQUEST: (id) => `${API_BASE_URL}/api/operators/reject/${id}`,
-SET_OPERATOR_CREDENTIALS: (id) => `${API_BASE_URL}/api/operators/set-credentials/${id}`,
+  SET_OPERATOR_CREDENTIALS: (id) => `${API_BASE_URL}/api/operators/set-credentials/${id}`,
 
+  // ---------------------- USER AUTH (OTP Based) ---------------------- //
+  USER_REGISTER: `${API_BASE_URL}/auth/register/send-otp`,
+  USER_REGISTER_OTP: `${API_BASE_URL}/auth/register/verify-otp`,
+  USER_LOGIN: `${API_BASE_URL}/auth/login/send-otp`,
+  USER_LOGIN_OTP: `${API_BASE_URL}/auth/login/verify-otp`,
 
-    // ---------------------- USER AUTH ---------------------- //
-    USER_REGISTER: `${API_BASE_URL}/auth/register/send-otp`,
-        USER_REGISTER_OTP: `${API_BASE_URL}/auth/register/verify-otp`,
+  // ---------------------- OPERATOR AUTH (OTP Based) ---------------------- //
+  OPERATOR_LOGIN: `${API_BASE_URL}/api/auth/operator/login`,
 
-            USER_LOGIN: `${API_BASE_URL}/auth/login/send-otp`,
-    USER_LOGIN_OTP: `${API_BASE_URL}/auth/login/verify-otp`,
-EMPLOYEES_SAVED: `${API_BASE_URL}/api/employees`,
-EMPLOYEES_LIST: `${API_BASE_URL}/api/employees`,
+  OPERATOR_SEND_OTP: `${API_BASE_URL}/api/auth/operator/send-otp`,
+  OPERATOR_VERIFY_OTP: `${API_BASE_URL}/api/auth/operator/verify-otp`,
 
-VEHICLES_SAVED: `${API_BASE_URL}/api/vehicles`,
-VEHICLES_LIST: `${API_BASE_URL}/api/vehicles`,
+  // ---------------------- EMPLOYEES ---------------------- //
+  EMPLOYEES_SAVED: `${API_BASE_URL}/api/employees`,
+  EMPLOYEES_LIST: `${API_BASE_URL}/api/employees`,
 
-BOOKINGS_SAVED: `${API_BASE_URL}/api/booking`,
-BOOKINGS_LIST: `${API_BASE_URL}/api/booking`,
+  // ---------------------- VEHICLES ---------------------- //
+  VEHICLES: `${API_BASE_URL}/api/vehicles`,
+  ADD_BUS_NUMBER:`${API_BASE_URL}/api/vehicles/add-bus-number`,
 
-CREDITS_SAVED: `${API_BASE_URL}/api/credits`,
-CREDITS_LIST: `${API_BASE_URL}/api/credits`,
+  // ---------------------- BOOKINGS ---------------------- //
+  BOOKINGS_SAVED: `${API_BASE_URL}/api/booking`,
+  BOOKINGS_LIST: `${API_BASE_URL}/api/booking`,
 
-DEBITS_SAVED: `${API_BASE_URL}/api/debits`,
-DEBITS_LIST: `${API_BASE_URL}/api/debits`,
+  // ---------------------- CREDITS ---------------------- //
+  CREDITS_SAVED: `${API_BASE_URL}/api/credits`,
+  CREDITS_LIST: `${API_BASE_URL}/api/credits`,
 
-INVOICES_SAVED: `${API_BASE_URL}/api/invoice`,
-INVOICES_LIST: `${API_BASE_URL}/api/invoice`,
+  // ---------------------- DEBITS ---------------------- //
+  DEBITS_SAVED: `${API_BASE_URL}/api/debits`,
+  DEBITS_LIST: `${API_BASE_URL}/api/debits`,
 
-TOLL_SAVED: `${API_BASE_URL}/api/tolltaxes`,
-TOLL_LIST: `${API_BASE_URL}/api/tolltaxes`,
+  // ---------------------- INVOICES ---------------------- //
+  INVOICES_SAVED: `${API_BASE_URL}/api/invoice`,
+  INVOICES_LIST: `${API_BASE_URL}/api/invoice`,
 
-FUEL_SAVED: `${API_BASE_URL}/api/fuelcharges`,
-FUEL_LIST: `${API_BASE_URL}/api/fuelcharges`,
+  // ---------------------- TOLL TAXES ---------------------- //
+  TOLL_SAVED: `${API_BASE_URL}/api/tolltaxes`,
+  TOLL_LIST: `${API_BASE_URL}/api/tolltaxes`,
 
+  // ---------------------- FUEL CHARGES ---------------------- //
+  FUEL_SAVED: `${API_BASE_URL}/api/fuelcharges`,
+  FUEL_LIST: `${API_BASE_URL}/api/fuelcharges`,
 
-SERVICE_SAVED: `${API_BASE_URL}/api/services`,
-SERVICE_LIST: `${API_BASE_URL}/api/services`,
-
-
-
-
-
-
-
-
-
-
-
-
-
+  // ---------------------- SERVICES ---------------------- //
+  SERVICE_SAVED: `${API_BASE_URL}/api/services`,
+  SERVICE_LIST: `${API_BASE_URL}/api/services`,
 };
 
 export default API_URLS;
